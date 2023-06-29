@@ -12,7 +12,7 @@ const questions = [
         question: 'Which is smallest country in the world? ',
         answer: [
             { text: 'Vatican City', correct: true },
-            { text: 'Bhutan', correct: true },
+            { text: 'Bhutan', correct: false },
             { text: 'Nepal', correct: false },
             { text: 'Sri Lanka', correct: false },
         ]
@@ -81,8 +81,37 @@ function selectAnswer(e) {
     const isCorrect = selectedBtn.dataset.correct === 'true';
     if (isCorrect) {
         selectedBtn.classList.add('correct');
+        score++;
     } else {
-        selectedBtn.classList.add('incorrrect')
+        selectedBtn.classList.add('incorrect')
+    }
+    Array.from(answerButton.children).forEach(button => {
+        if (button.dataset.correct === 'true') {
+            button.classList.add('correct');
+        }
+        button.disabled = true;
+    })
+    nextButton.style.display = 'block'
+}
+function showScore(){
+    resetState();
+    questionElement.innerHTML = `You scored ${score} out of ${questions.length}`;
+    nextButton.innerHTML = 'play again'
+    nextButton.style.display = 'block'
+}
+function handdleNextButton() {
+    currentQuestionIndex++;
+    if(currentQuestionIndex < questions.length){
+        showQuestion();
+    }else{
+        showScore();
     }
 }
+nextButton.addEventListener('click', ()=>{
+    if(currentQuestionIndex < questions.length){
+        handdleNextButton();
+    }else{
+        startQuiz();
+    }
+})
 startQuiz();
